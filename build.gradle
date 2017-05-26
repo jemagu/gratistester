@@ -1,0 +1,12 @@
+description = 'A trivial Gradle build'
+version = '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+repositories {
+    jcenter()  
+}
+
+dependencies {  
+    compile 'junit:junit:4.12'         
+}
