@@ -6,7 +6,10 @@ If you have an Object with a sloppy written equals method
 ```java
     @Override
     public boolean equals(Object obj) {
-        return this.name.equalsIgnoreCase(((User) obj).name);
+        if (obj != null && !this.name.equalsIgnoreCase(((User) obj).name)) {
+            return false;
+        }
+        return true;
     }
 ```
 The following test
