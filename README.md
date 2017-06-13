@@ -2,7 +2,7 @@
 Simple test tool for Java
 
 Usage:
-If you have an Object with a sloppy written equals method
+If you have an Class with a sloppy written equals method
 ```java
     @Override
     public boolean equals(Object obj) {
