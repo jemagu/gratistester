@@ -22,7 +22,7 @@ dependencies {
 }
 
 description = 'A trivial Gradle build'
-version = '1.0.0'
+version = '1.0.1'
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
@@ -73,7 +73,7 @@ publishing {
             }
             groupId 'se.gunta'
             artifactId 'gratistester'
-            version '1.0.0'
+            version '1.0.1'
             pom.withXml {
                 def root = asNode()
                 root.appendNode('description', 'gratistester')
@@ -97,8 +97,8 @@ bintray {
 		licenses = ['Apache-2.0']
 		vcsUrl = 'https://github.com/jemagu/gratistester.git'
 		version {
-			name = '1.0.0'
-			desc = '1.0.0'
+			name = '1.0.1'
+			desc = '1.0.1'
 			released  = new Date()
 		}
 	}

@@ -24,7 +24,7 @@ public class Contracts {
                     assertComperableNice(object1, object2);
                 }
             }
-            //assertSerializable(object1);
+            assertSerializable(object1);
             assertCompareToNullYieldsNullPointerException(object1);
         }
     }
@@ -70,12 +70,15 @@ public class Contracts {
         }
     }
     
-    public static void assertSerializable(Object x) throws IOException {
-        if (x instanceof Serializable) {
-            Serializable xs = (Serializable) x;
-            Serializable ser = Serializer.pickle(xs);
-            //Serializer.unpickle(b, null)
-            //assertTrue("It is strongly recommended (though not required) that natural orderings be consistent with equals.", (xc.compareTo(y)==0) == (xc.equals(y)));
+    public static void assertSerializable(Object x) {
+        try {
+            if (x instanceof Serializable) {
+                Serializable xs = (Serializable) x;
+                byte[] asByteArray = Serializer.pickle(xs);
+                Serializable unpickle = Serializer.unpickle(asByteArray, (Class<Serializable>) x.getClass());
+            }
+        } catch (IOException | ClassNotFoundException ex) {
+            throw new AssertionError(ex);
         }
     }
     
