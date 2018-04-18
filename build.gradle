@@ -1,7 +1,17 @@
-description = 'A trivial Gradle build'
-version = '1.0-SNAPSHOT'
 
-apply plugin: 'java'
+buildscript {
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+  }
+}
+
+plugins {
+    id "com.jfrog.bintray" version "1.7.3"
+    id "maven-publish"
+    id 'java'
+}
 
 repositories {
     jcenter()  
@@ -9,4 +19,88 @@ repositories {
 
 dependencies {  
     compile 'junit:junit:4.12'         
+}
+
+description = 'A trivial Gradle build'
+version = '1.0.0'
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+javadoc.failOnError = false
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+def pomConfig = {
+    licenses {
+        license {
+            name "The Apache Software License, Version 2.0"
+            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            id "jemagu"
+            name "Magnus G"
+            email "magnus@gunta.se"
+        }
+    }
+
+    scm {
+        url "https://github.com/jemagu/gratistester"
+    }
+}
+
+publishing {
+    publications {
+        mavenPublication(MavenPublication) {
+            from components.java
+            artifact sourcesJar {
+                classifier "sources"
+            }
+            artifact javadocJar {
+                classifier "javadoc"
+            }
+            groupId 'se.gunta'
+            artifactId 'gratistester'
+            version '1.0.0'
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', 'gratistester')
+                root.appendNode('name', 'Gratistester')
+                root.appendNode('url', 'https://github.com/jemagu/gratistester')
+                root.children().last() + pomConfig
+            }
+        }
+    }
+}
+
+bintray {
+	user = System.getProperty('bintray.user')
+	key = System.getProperty('bintray.key')
+	publications = ['mavenPublication']
+
+	pkg {
+		repo = 'gratistester'
+		name = 'gratistester'
+		userOrg = 'gunta'
+		licenses = ['Apache-2.0']
+		vcsUrl = 'https://github.com/jemagu/gratistester.git'
+		version {
+			name = '1.0.0'
+			desc = '1.0.0'
+			released  = new Date()
+		}
+	}
+
 }
